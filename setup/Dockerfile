@@ -7,6 +7,8 @@ SHELL [ "/bin/bash", "-c" ]
 
 RUN mkdir -p out/packages
 
+RUN touch out/packages/.gitgnore
+
 RUN apt-get --download-only install -y \
     libopenblas-dev \
     liblapack-dev \
