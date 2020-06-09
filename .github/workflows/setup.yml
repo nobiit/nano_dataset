@@ -1,0 +1,48 @@
+name: Setup Dataset ARM64
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - .github/workflows/setup.yml
+      - setup/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: nguyenchienbg2k
+      PLATFORM: linux/arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Build
+        run: |
+          cd setup
+          chmod +x ./build.sh
+          ./build.sh ${DOCKER_USERNAME} ${PLATFORM}
+      - name: Clone
+        run: |
+          docker run -t -v $(pwd):/out dataset
+      - name: Status
+        run: |
+          git add .
+          git status
+      - name: Commit
+        run: |
+          git config user.email "bot@nobidev.com"
+          git config user.name "Bot NobiDev"
+          git commit -am "Update Package"
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
