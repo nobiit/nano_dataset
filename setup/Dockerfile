@@ -27,7 +27,24 @@ RUN apt-get --download-only install -y \
     python3-tk \
     libharfbuzz-dev \
     libfribidi-dev \
-    libxcb1-dev
+    libxcb1-dev \
+    build-essential \
+    pkg-config \
+    libgtk-3-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    gfortran \
+    openexr \
+    libtbb2 \
+    libtbb-dev \
+    libdc1394-22-dev
 
 RUN mv /var/cache/apt/archives/*.deb out/packages && \
     ls -l out/packages
